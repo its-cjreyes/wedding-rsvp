@@ -1,0 +1,39 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  width: min(640px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  color: #1c1c1c;
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  margin-bottom: 1.25rem;
+  color: #555;
+}

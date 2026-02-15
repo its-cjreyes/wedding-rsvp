@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mac and CJ Wedding RSVP
 
-## Getting Started
+Public RSVP web app built with Next.js App Router, TypeScript, SCSS Modules, Supabase Postgres, and Zapier webhooks.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js (App Router)
+- TypeScript
+- SCSS Modules (`sass`)
+- Supabase (`@supabase/supabase-js`)
+- Zapier incoming webhook
+- Vercel deployment target
+
+## Requirements
+
+- Node.js `>=20.9.0`
+- npm
+
+Use `.nvmrc` to align local Node version.
+
+## Environment Variables
+
+Create `/.env.local` with:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+ZAPIER_WEBHOOK_URL=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open `http://localhost:3000`.
 
-## Learn More
+## API Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+- `POST /api/lookup`
+  - Input: `{ "first_name": "...", "last_name": "..." }`
+  - Returns one of:
+    - `{ status: "match", group_id, guests }`
+    - `{ status: "suggestions", matches }`
+    - `{ status: "locked" }`
+    - `{ status: "none" }`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `POST /api/submit`
+  - Input: `{ group_id, guests: [{ id, attending, dietary, first_name?, last_name? }] }`
+  - On success:
+    - updates all guest rows with attendance, dietary, submission UUID
+    - locks invite group
+    - posts one webhook payload per guest to Zapier
+    - returns `{ status: "success", submission_id, webhook_failures }`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Manual Test Plan
 
-## Deploy on Vercel
+1. Exact match lookup
+- Enter full first/last name for an invited guest.
+- Expect `match` and full invite group rendered.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Partial suggestion
+- Enter partial or misspelled name.
+- Expect `Did you mean?` suggestions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Split attendance in a group
+- Mark one guest attending and another declining.
+- Submit and verify each guest record updated accordingly.
+
+4. Plus-one placeholder flow
+- Use a group with `is_plus_one=true` and missing first/last name.
+- Mark plus one attending.
+- Verify first and last name are required before submit.
+
+5. Lock behavior
+- Submit RSVP for a group.
+- Attempt lookup again; expect locked state.
+- Attempt direct submit again; expect conflict/locked error.
+
+6. Zapier webhook firing
+- Confirm one webhook request per guest is received by Zapier.
+- Validate payload includes:
+  - `submission_id`
+  - `group_id`
+  - `first_name`
+  - `last_name`
+  - `attending`
+  - `dietary`
+  - `submitted_at`
+
+7. Google Sheets row creation (if connected via Zapier)
+- Confirm each guest creates a row in the sheet.
+
+## Deployment (Vercel)
+
+1. Push repository to GitHub.
+2. Import project into Vercel.
+3. Set environment variables in Vercel Project Settings:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ZAPIER_WEBHOOK_URL`
+4. Deploy.
+5. Run the manual test plan against the live preview URL.
+
+## Security Notes
+
+- `SUPABASE_SERVICE_ROLE_KEY` is server-only. It is only used in API routes and `src/lib/supabase-server.ts`.
+- No Supabase Auth is used in this application.
