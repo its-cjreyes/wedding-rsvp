@@ -211,7 +211,11 @@ export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
 
       {error ? <p className={styles.error}>{error}</p> : null}
 
-      <button className={styles.submitButton} type="submit" disabled={submitting}>
+      <button
+        className={`ctaOutline ${styles.submitButton}`}
+        type="submit"
+        disabled={submitting}
+      >
         {submitting ? "Submitting..." : "Submit RSVP"}
       </button>
     </form>

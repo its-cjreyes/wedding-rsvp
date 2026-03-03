@@ -14,41 +14,30 @@ type Guest = {
   is_plus_one: boolean;
 };
 
-type Suggestion = {
-  id: string;
-  first_name: string | null;
-  last_name: string | null;
-};
-
 type LookupResponse =
   | { status: "match"; group_id: string; guests: Guest[] }
-  | { status: "suggestions"; matches: Suggestion[] }
   | { status: "none" }
   | { status: "locked" }
   | { error: string };
 
 export function LookupForm() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [groupId, setGroupId] = useState<string | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
   const resetLookupState = () => {
     setMessage("");
     setGroupId(null);
     setGuests([]);
-    setSuggestions([]);
   };
 
-  const runLookup = async (searchFirstName: string, searchLastName: string) => {
-    const normalizedFirst = searchFirstName.trim();
-    const normalizedLast = searchLastName.trim();
+  const runLookup = async (code: string) => {
+    const normalizedCode = code.trim().toUpperCase();
 
-    if (!normalizedFirst || !normalizedLast) {
-      setMessage("Please enter both first and last name.");
+    if (!normalizedCode) {
+      setMessage("Please enter your invitation code.");
       return;
     }
 
@@ -60,15 +49,14 @@ export function LookupForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          first_name: normalizedFirst,
-          last_name: normalizedLast,
+          invite_code: normalizedCode,
         }),
       });
 
       const data = (await response.json()) as LookupResponse;
 
       if (!response.ok && "error" in data) {
-        setMessage(data.error || "Something went wrong while looking up your invitation.");
+        setMessage(data.error || "Something went wrong. Please try again.");
         return;
       }
 
@@ -78,20 +66,16 @@ export function LookupForm() {
         return;
       }
 
-      if ("status" in data && data.status === "suggestions") {
-        setSuggestions(data.matches);
-        setMessage("Did you mean one of these names?");
-        return;
-      }
-
       if ("status" in data && data.status === "locked") {
-        setMessage("This invitation has already been submitted.");
+        setMessage(
+          "This RSVP has already been submitted. If you need to make a change, please contact us."
+        );
         return;
       }
 
-      setMessage("We couldn't find a matching invitation.");
+      setMessage("We couldn't find that code. Please try again.");
     } catch {
-      setMessage("Network error. Please try again.");
+      setMessage("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -99,16 +83,7 @@ export function LookupForm() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await runLookup(firstName, lastName);
-  };
-
-  const onSuggestionClick = async (suggestion: Suggestion) => {
-    const suggestedFirst = suggestion.first_name ?? "";
-    const suggestedLast = suggestion.last_name ?? "";
-
-    setFirstName(suggestedFirst);
-    setLastName(suggestedLast);
-    await runLookup(suggestedFirst, suggestedLast);
+    await runLookup(inviteCode);
   };
 
   if (groupId && guests.length > 0) {
@@ -119,47 +94,29 @@ export function LookupForm() {
     <div>
       <form className={styles.form} onSubmit={onSubmit}>
         <label className={styles.field}>
-          First Name
+          Enter your invite code to continue
           <input
             type="text"
-            value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
-            autoComplete="given-name"
+            value={inviteCode}
+            onChange={(event) => setInviteCode(event.target.value)}
+            placeholder="Invite code"
+            autoComplete="off"
           />
+          <span className={styles.helperText}>
+            You&apos;ll find this in your email invitation.
+          </span>
         </label>
 
-        <label className={styles.field}>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
-            autoComplete="family-name"
-          />
-        </label>
-
-        <button type="submit" className={styles.submitButton} disabled={loading}>
-          {loading ? "Searching..." : "Find My Invitation"}
+        <button
+          type="submit"
+          className={`ctaOutline ${styles.submitButton}`}
+          disabled={loading}
+        >
+          {loading ? "Continuing..." : "Continue"}
         </button>
       </form>
 
       {message ? <p className={styles.message}>{message}</p> : null}
-
-      {suggestions.length > 0 ? (
-        <ul className={styles.suggestions}>
-          {suggestions.map((suggestion) => (
-            <li key={suggestion.id}>
-              <button
-                type="button"
-                className={styles.suggestionButton}
-                onClick={() => onSuggestionClick(suggestion)}
-              >
-                {(suggestion.first_name ?? "") + " " + (suggestion.last_name ?? "")}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </div>
   );
 }

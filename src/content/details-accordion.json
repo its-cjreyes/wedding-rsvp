@@ -1,0 +1,49 @@
+[
+  {
+    "id": "venue",
+    "title": "Venue",
+    "body": [
+      "Both the ceremony and reception will take place at The Broadview Hotel. No additional travel required, everything will happen in the same building.",
+      "Guests may begin arriving at 5:00 PM, with the ceremony beginning promptly at 5:30 PM. Cocktail hour, dinner, and dancing will follow into the evening.",
+      "The venue is located at 106 Broadview Ave, Toronto, at the corner of Queen St E and Broadview Ave. It is easily accessible by car service and public transit. A Green P parking lot is located directly across the street for those driving."
+    ]
+  },
+  {
+    "id": "accommodations",
+    "title": "Accommodations",
+    "body": [
+      "We have reserved a limited number of rooms at The Broadview Hotel for our out-of-town guests at a preferred rate.",
+      "If you’re traveling in and would like more information, please reach out to us directly."
+    ]
+  },
+  {
+    "id": "dress-code",
+    "title": "Dress Code",
+    "body": [
+      "The dress code is black and white formal.",
+      "Anything you would typically wear to a formal wedding — just within those colors."
+    ]
+  },
+  {
+    "id": "plus-ones-and-children",
+    "title": "Plus-Ones & Children",
+    "body": [
+      "Due to limited space, we are only able to accommodate guests who are formally invited on the invitation.",
+      "And while we love your little ones, we’ve chosen to keep our wedding celebration reserved for adult guests. We truly appreciate your understanding and look forward to celebrating together."
+    ]
+  },
+  {
+    "id": "rsvp-deadline",
+    "title": "RSVP Deadline",
+    "body": [
+      "Kindly respond by [DATE] so we can finalize arrangements."
+    ]
+  },
+  {
+    "id": "changes-to-rsvp",
+    "title": "Changes to Your RSVP",
+    "body": [
+      "If your plans change after you’ve submitted your RSVP, please contact us directly and we’ll take care of it."
+    ]
+  }
+]

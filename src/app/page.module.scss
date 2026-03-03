@@ -1,42 +1,239 @@
 .page {
   min-height: 100vh;
+  padding: 2rem 2rem 3rem;
+}
+
+.main {
+  width: min(75rem, 100%);
+  margin: 0 auto;
   display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #f4efe9, #f9f8fb);
-  padding: 2rem 1rem;
+  gap: 10rem;
 }
 
 .hero {
-  width: min(720px, 100%);
-  text-align: center;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.heroIllustration {
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scale(1.1) translate(-2em, 1em);
+  }
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4.625rem;
+  align-items: flex-end;
+}
+
+.wordmark {
+  width: min(31.25rem, 100%);
+  height: auto;
+}
+
+.heroDetails {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.heroMeta {
+  display: grid;
+
+  p {
+    text-align: right;
+  }
+}
+
+.upperText {
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-body-line-height);
+  letter-spacing: 0.1625rem;
+  text-transform: uppercase;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.rsvpButton {
+  min-width: fit-content;
+}
+
+.detailsLink {
+  font-size: 1.125rem;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+  text-transform: uppercase;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.detailsSection {
+  position: relative;
+  display: grid;
+  gap: 8rem;
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 1fr);
+  align-items: flex-start;
+}
+
+.detailsContent {
+  min-width: 0;
+}
+
+.detailsTitle {
+  margin-bottom: 3.75rem;
+}
+
+.accordionList {
+  display: grid;
+}
+
+.accordionItem:not(:last-child) {
+  border-bottom: 1px solid rgba(27, 122, 80, 0.25);
+}
+
+.accordionTrigger {
+  width: 100%;
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.0275rem;
+}
+
+.accordionPanel {
+  padding: 0 0 1rem;
   display: grid;
   gap: 1rem;
 }
 
-.kicker {
-  font-size: 0.95rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #5f5b57;
+.carouselRail {
+  min-width: 0;
 }
 
-.title {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 600;
+.carouselPlaceholder {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  height: fit-content;
+  min-width: 0;
+  min-height: 18.75rem;
+  border: 1px dashed #bcbcbc;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
 }
 
-.details {
-  color: #514a45;
-  line-height: 1.5;
+.footerMessage {
+  p {
+    text-align: center;
+  }
 }
 
-.rsvpButton {
-  justify-self: center;
-  border: none;
-  border-radius: 999px;
-  padding: 0.85rem 1.4rem;
-  font-size: 1rem;
-  background: #1d3557;
-  color: #fff;
-  cursor: pointer;
+@media screen and (max-width: 64rem) {
+  .heroIllustration {
+    img {
+      transform: scale(1) translate(0,0);
+    }
+  }
+
+  .wordmark {
+    max-width: 21.875rem;
+  }
+}
+
+@media screen and (max-width: 53.125rem) {
+  .page {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .main {
+    gap: 5rem;
+  }
+
+  .hero {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .heroContent {
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .wordmark {
+    max-width: 18.75rem;
+  }
+
+  .upperText {
+    font-size: 1rem;
+    letter-spacing: 0.125rem;
+  }
+
+  .heroMeta {
+    p {
+      text-align: center;
+    }
+  }
+
+  .heroActions {
+    justify-content: center;
+  }
+
+  .detailsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: stretch;
+    margin-top: 0;
+  }
+
+  .detailsTitle {
+    margin-bottom: 1.5rem;
+  }
+
+  .carouselRail {
+    width: 100%;
+  }
+
+  .carouselPlaceholder {
+    position: static;
+    width: 100%;
+    min-height: clamp(12rem, 55vw, 18.75rem);
+  }
+
+  .footerMessage {
+    max-width: 15.625rem;
+    margin: auto;
+  }
 }

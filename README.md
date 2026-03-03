@@ -40,10 +40,9 @@ Open `http://localhost:3000`.
 ## API Endpoints
 
 - `POST /api/lookup`
-  - Input: `{ "first_name": "...", "last_name": "..." }`
+  - Input: `{ "invite_code": "..." }`
   - Returns one of:
     - `{ status: "match", group_id, guests }`
-    - `{ status: "suggestions", matches }`
     - `{ status: "locked" }`
     - `{ status: "none" }`
 
@@ -58,12 +57,12 @@ Open `http://localhost:3000`.
 ## Manual Test Plan
 
 1. Exact match lookup
-- Enter full first/last name for an invited guest.
+- Enter a valid invite code.
 - Expect `match` and full invite group rendered.
 
-2. Partial suggestion
-- Enter partial or misspelled name.
-- Expect `Did you mean?` suggestions.
+2. Unknown code
+- Enter an invalid invite code.
+- Expect a not-found message.
 
 3. Split attendance in a group
 - Mark one guest attending and another declining.

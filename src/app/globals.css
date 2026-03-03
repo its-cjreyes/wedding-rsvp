@@ -1,6 +1,21 @@
 :root {
   --background: #ffffff;
-  --foreground: #1b1b1b;
+  --foreground: #1b7a50;
+  --error: #b42318;
+
+  --radius-control: 0.25rem;
+  --transition-fast: all 0.2s ease;
+
+  --text-body-size: 1rem;
+  --text-body-line-height: 1.6;
+  --text-cta-size: 1.125rem;
+  --text-h2-size: 5rem;
+  --text-h2-size-mobile: 3.75rem;
+  --text-h2-tracking: -0.1rem;
+  --text-h2-tracking-mobile: -0.0625rem;
+
+  --cta-padding-block: 0.65rem;
+  --cta-padding-inline: 1.25rem;
 }
 
 * {
@@ -13,17 +28,70 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-kalnia), serif;
+}
+
+h2 {
+  font-size: var(--text-h2-size);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: var(--text-h2-tracking);
+}
+
+p,
+li {
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--text-body-size);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-body-line-height);
 }
 
 button,
 input {
   font: inherit;
+}
+
+.ctaOutline {
+  border: 1px solid currentColor;
+  border-radius: var(--radius-control);
+  padding: var(--cta-padding-block) var(--cta-padding-inline);
+  font: inherit;
+  font-size: var(--text-cta-size);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.ctaOutline:hover,
+.ctaOutline:focus {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+@media screen and (max-width: 47.9375rem) {
+  h2 {
+    font-size: var(--text-h2-size-mobile);
+    letter-spacing: var(--text-h2-tracking-mobile);
+  }
 }
