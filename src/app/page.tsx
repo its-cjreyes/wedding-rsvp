@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 
+import { PhotoCarousel } from "@/components/PhotoCarousel";
 import { RsvpModal } from "@/components/RsvpModal";
+import carouselPhotos from "@/content/carousel-photos.json";
 import detailsAccordionItems from "@/content/details-accordion.json";
 import broadviewIllustration from "@/assets/Broadview-Hotel-Illustration.svg";
 import macAndCjLogo from "@/assets/Mac-and-CJ-Logo.svg";
@@ -14,6 +16,12 @@ type DetailAccordionItem = {
   id: string;
   title: string;
   body: string[];
+};
+
+type CarouselPhoto = {
+  src: string;
+  alt: string;
+  caption: string;
 };
 
 export default function Home() {
@@ -97,9 +105,7 @@ export default function Home() {
           </div>
 
           <div className={styles.carouselRail}>
-            <div className={styles.carouselPlaceholder} aria-label="Photo carousel placeholder">
-              <div>Photo carousel placeholder</div>
-            </div>
+            <PhotoCarousel photos={carouselPhotos as CarouselPhoto[]} />
           </div>
         </section>
 
