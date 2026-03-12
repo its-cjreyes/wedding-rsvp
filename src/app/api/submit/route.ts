@@ -152,42 +152,61 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "This invitation is already locked." }, { status: 409 });
     }
 
-    const webhookUrl = process.env.ZAPIER_WEBHOOK_URL;
+    const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
+    const secret = process.env.SHEETS_WEBHOOK_SECRET;
+
+    if (!webhookUrl || !secret) {
+      return NextResponse.json(
+        { error: "Sheets webhook is not configured." },
+        { status: 500 }
+      );
+    }
+
     const webhookFailures: string[] = [];
 
-    if (webhookUrl) {
-      const webhookResults = await Promise.allSettled(
-        guestsPayload.map(async (submittedGuest) => {
-          const sourceGuest = guestsById.get(submittedGuest.id);
-          const firstName = normalizedName(submittedGuest.first_name) ?? sourceGuest?.first_name;
-          const lastName = normalizedName(submittedGuest.last_name) ?? sourceGuest?.last_name;
+    const webhookResults = await Promise.allSettled(
+      guestsPayload.map(async (submittedGuest) => {
+        const sourceGuest = guestsById.get(submittedGuest.id);
+        const firstName =
+          normalizedName(submittedGuest.first_name) ??
+          normalizedName(sourceGuest?.first_name ?? undefined);
+        const lastName =
+          normalizedName(submittedGuest.last_name) ??
+          normalizedName(sourceGuest?.last_name ?? undefined);
 
-          const response = await fetch(webhookUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              submission_id: submissionId,
-              group_id: groupId,
-              first_name: firstName,
-              last_name: lastName,
-              attending: submittedGuest.attending,
-              dietary: submittedGuest.attending ? submittedGuest.dietary ?? null : null,
-              submitted_at: nowIso,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error(`Webhook failed for guest ${submittedGuest.id}`);
-          }
-        })
-      );
-
-      webhookResults.forEach((result) => {
-        if (result.status === "rejected") {
-          webhookFailures.push(result.reason instanceof Error ? result.reason.message : "Unknown webhook failure");
+        if (!firstName || !lastName) {
+          return;
         }
-      });
-    }
+
+        const response = await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            secret,
+            submission_id: submissionId,
+            group_id: groupId,
+            first_name: firstName,
+            last_name: lastName,
+            attending: submittedGuest.attending,
+            dietary:
+              submittedGuest.attending && submittedGuest.dietary?.trim()
+                ? submittedGuest.dietary.trim()
+                : null,
+            submitted_at: nowIso,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Webhook failed for guest ${submittedGuest.id}`);
+        }
+      })
+    );
+
+    webhookResults.forEach((result) => {
+      if (result.status === "rejected") {
+        webhookFailures.push(result.reason instanceof Error ? result.reason.message : "Unknown webhook failure");
+      }
+    });
 
     return NextResponse.json({
       status: "success",
