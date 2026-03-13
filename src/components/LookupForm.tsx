@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import { GroupRsvp } from "./GroupRsvp";
 import styles from "./LookupForm.module.scss";
@@ -20,12 +20,22 @@ type LookupResponse =
   | { status: "locked" }
   | { error: string };
 
-export function LookupForm() {
-  const [inviteCode, setInviteCode] = useState("");
+type LookupFormProps = {
+  initialInviteCode?: string;
+};
+
+const normalizeInviteCode = (value?: string) => value?.trim().toUpperCase() ?? "";
+
+export function LookupForm({ initialInviteCode = "" }: LookupFormProps) {
+  const [inviteCode, setInviteCode] = useState(() => normalizeInviteCode(initialInviteCode));
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [groupId, setGroupId] = useState<string | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
+
+  useEffect(() => {
+    setInviteCode(normalizeInviteCode(initialInviteCode));
+  }, [initialInviteCode]);
 
   const resetLookupState = () => {
     setMessage("");
@@ -34,7 +44,7 @@ export function LookupForm() {
   };
 
   const runLookup = async (code: string) => {
-    const normalizedCode = code.trim().toUpperCase();
+    const normalizedCode = normalizeInviteCode(code);
 
     if (!normalizedCode) {
       setMessage("Please enter your invitation code.");
@@ -98,7 +108,7 @@ export function LookupForm() {
           <input
             type="text"
             value={inviteCode}
-            onChange={(event) => setInviteCode(event.target.value)}
+            onChange={(event) => setInviteCode(normalizeInviteCode(event.target.value))}
             placeholder="Invite code"
             autoComplete="off"
           />

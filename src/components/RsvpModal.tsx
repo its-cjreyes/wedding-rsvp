@@ -8,9 +8,14 @@ import styles from "./RsvpModal.module.scss";
 type RsvpModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  initialInviteCode?: string;
 };
 
-export function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
+export function RsvpModal({
+  isOpen,
+  onClose,
+  initialInviteCode = "",
+}: RsvpModalProps) {
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -48,7 +53,7 @@ export function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
 
         <h2 className={styles.title}>RSVP</h2>
 
-        <LookupForm />
+        <LookupForm initialInviteCode={initialInviteCode} />
       </div>
     </div>
   );

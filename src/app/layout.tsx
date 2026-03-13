@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Kalnia } from "next/font/google";
 
-import "./globals.css";
+import { getSiteUrl } from "@/lib/site-url";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,7 +16,7 @@ const kalnia = Kalnia({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(getSiteUrl()),
   title: "Mac and CJ",
   description: "RSVP portal for the wedding of Mac and CJ.",
   icons: {

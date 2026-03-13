@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 import { PhotoCarousel } from "@/components/PhotoCarousel";
 import { RsvpModal } from "@/components/RsvpModal";
@@ -25,8 +26,10 @@ type CarouselPhoto = {
 };
 
 export default function Home() {
+  const searchParams = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDetailId, setOpenDetailId] = useState<string>("");
+  const initialInviteCode = searchParams.get("code") ?? "";
 
   const toggleDetail = (id: string) => {
     setOpenDetailId((currentId) => (currentId === id ? "" : id));
@@ -114,7 +117,11 @@ export default function Home() {
         </section>
       </main>
 
-      <RsvpModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <RsvpModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialInviteCode={initialInviteCode}
+      />
     </div>
   );
 }

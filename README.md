@@ -1,6 +1,6 @@
 # Mac and CJ Wedding RSVP
 
-Public RSVP web app built with Next.js App Router, TypeScript, SCSS Modules, Supabase Postgres, and Zapier webhooks.
+Public RSVP web app built with Next.js App Router, TypeScript, SCSS Modules, Supabase Postgres, Google Sheets webhooks, and Resend email invites.
 
 ## Stack
 
@@ -8,7 +8,8 @@ Public RSVP web app built with Next.js App Router, TypeScript, SCSS Modules, Sup
 - TypeScript
 - SCSS Modules (`sass`)
 - Supabase (`@supabase/supabase-js`)
-- Zapier incoming webhook
+- Resend
+- Google Sheets webhook
 - Vercel deployment target
 
 ## Requirements
@@ -25,7 +26,12 @@ Create `/.env.local` with:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
-ZAPIER_WEBHOOK_URL=
+NEXT_PUBLIC_SITE_URL=
+SHEETS_WEBHOOK_URL=
+SHEETS_WEBHOOK_SECRET=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+TEST_INVITE_EMAIL=
 ```
 
 ## Local Development
@@ -51,8 +57,30 @@ Open `http://localhost:3000`.
   - On success:
     - updates all guest rows with attendance, dietary, submission UUID
     - locks invite group
-    - posts one webhook payload per guest to Zapier
+    - posts one webhook payload per guest to the Sheets webhook
     - returns `{ status: "success", submission_id, webhook_failures }`
+
+- `POST /api/send-test-invite`
+  - Input: `{ guest_id? }` or `{ guest_email? }`
+  - Sends one Resend invite email to `TEST_INVITE_EMAIL`
+  - Uses that guest's shared invite code in the RSVP URL
+
+## Invite Emails
+
+- The email RSVP link uses `/rsvp?code=...`.
+- The RSVP form prefills the invite code field only.
+- Guests still must click `Continue` manually.
+- Final submission locking remains controlled by the existing lookup and submit flow.
+
+### Manual Batch Send
+
+```bash
+npm run send:invites -- --confirm
+```
+
+- Sends one email per guest row with a non-empty email address.
+- Guests in the same invite group receive separate emails with the same shared invite code.
+- The script logs successes and failures and exits non-zero if any sends fail.
 
 ## Manual Test Plan
 
@@ -78,8 +106,8 @@ Open `http://localhost:3000`.
 - Attempt lookup again; expect locked state.
 - Attempt direct submit again; expect conflict/locked error.
 
-6. Zapier webhook firing
-- Confirm one webhook request per guest is received by Zapier.
+6. Sheets webhook firing
+- Confirm one webhook request per guest is received by the Apps Script webhook.
 - Validate payload includes:
   - `submission_id`
   - `group_id`
@@ -89,8 +117,13 @@ Open `http://localhost:3000`.
   - `dietary`
   - `submitted_at`
 
-7. Google Sheets row creation (if connected via Zapier)
+7. Google Sheets row creation (if connected via the webhook)
 - Confirm each guest creates a row in the sheet.
+
+8. Invite email prefill
+- Send a test invite through `POST /api/send-test-invite`.
+- Open the RSVP link from the email.
+- Confirm the invite code field is prefilled but not auto-submitted.
 
 ## Deployment (Vercel)
 
@@ -99,11 +132,17 @@ Open `http://localhost:3000`.
 3. Set environment variables in Vercel Project Settings:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `ZAPIER_WEBHOOK_URL`
+- `NEXT_PUBLIC_SITE_URL`
+- `SHEETS_WEBHOOK_URL`
+- `SHEETS_WEBHOOK_SECRET`
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `TEST_INVITE_EMAIL`
 4. Deploy.
 5. Run the manual test plan against the live preview URL.
 
 ## Security Notes
 
 - `SUPABASE_SERVICE_ROLE_KEY` is server-only. It is only used in API routes and `src/lib/supabase-server.ts`.
+- `RESEND_API_KEY` is server-only. It is only used in server routes and manual scripts.
 - No Supabase Auth is used in this application.
