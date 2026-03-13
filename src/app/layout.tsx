@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Mac and CJ",
   description: "RSVP portal for the wedding of Mac and CJ.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/favicon.png", sizes: "512x512", type: "image/png" }],
+  },
   openGraph: {
     title: "Mac and CJ",
     description: "RSVP portal for the wedding of Mac and CJ.",
