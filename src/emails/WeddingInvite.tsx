@@ -8,7 +8,7 @@ type WeddingInviteProps = {
   assetBaseUrl?: string;
 };
 
-const previewText = "You're invited to celebrate Mac and CJ.";
+const previewText = "Friday 16 October 2026 at The Broadview Hotel";
 
 const colors = {
   background: "#ffffff",
@@ -107,7 +107,7 @@ export function WeddingInvite({
                   <br />
                   The Broadview Hotel
                   <br />
-                  Toronto, Ontario
+                  Toronto
                 </p>
 
                 <p
