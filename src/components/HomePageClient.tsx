@@ -70,7 +70,7 @@ export function HomePageClient({
                   RSVP
                 </button>
                 <a href="#details" className={styles.detailsLink}>
-                  The Details
+                  THE DETAILS
                 </a>
               </div>
             </div>

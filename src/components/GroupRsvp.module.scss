@@ -90,7 +90,70 @@
   color: var(--error);
 }
 
+.stepHeader {
+  display: grid;
+  gap: 0.25rem;
+
+  h3 {
+    font-family: var(--font-inter), sans-serif;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+}
+
+.messageStep {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.messageField {
+  display: grid;
+
+  textarea {
+    min-height: 9rem;
+    border: 1px solid #d4d4d4;
+    border-radius: var(--radius-control);
+    padding: 0.75rem 0.85rem;
+    font: inherit;
+    font-size: 1rem;
+    resize: none;
+    background: #fff;
+  }
+}
+
+.stepActions {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
 .submitButton {
+  width: 100%;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.backButton {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.125rem;
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
   &:disabled {
     opacity: 0.65;
     cursor: not-allowed;

@@ -28,6 +28,8 @@ type GroupRsvpProps = {
   guests: Guest[];
 };
 
+type FlowStep = "guests" | "message";
+
 export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
   const initialGuests = useMemo<GuestFormState[]>(
     () =>
@@ -44,6 +46,8 @@ export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
   );
 
   const [guestStates, setGuestStates] = useState<GuestFormState[]>(initialGuests);
+  const [currentStep, setCurrentStep] = useState<FlowStep>("guests");
+  const [messageToCouple, setMessageToCouple] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -70,6 +74,18 @@ export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
     return "";
   };
 
+  const goToMessageStep = () => {
+    const validationError = validate();
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setError("");
+    setCurrentStep("message");
+  };
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -88,6 +104,7 @@ export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           group_id: groupId,
+          message_to_couple: messageToCouple.trim() || null,
           guests: guestStates.map((guest) => ({
             id: guest.id,
             attending: Boolean(guest.attending),
@@ -131,93 +148,133 @@ export function GroupRsvp({ groupId, guests }: GroupRsvpProps) {
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
-      {guestStates.map((guest, index) => (
-        <section className={styles.guestCard} key={guest.id}>
-          <h3>
-            {guest.first_name && guest.last_name
-              ? `${guest.first_name} ${guest.last_name}`
-              : `Guest ${index + 1}`}
-          </h3>
+      {currentStep === "guests" ? (
+        <>
+          {guestStates.map((guest, index) => (
+            <section className={styles.guestCard} key={guest.id}>
+              <h3>
+                {guest.first_name && guest.last_name
+                  ? `${guest.first_name} ${guest.last_name}`
+                  : `Guest ${index + 1}`}
+              </h3>
 
-          <div className={styles.radioRow}>
-            <label>
-              <input
-                type="radio"
-                name={`attending-${guest.id}`}
-                checked={guest.attending === true}
-                onChange={() => updateGuest(guest.id, { attending: true })}
-              />
-              Joyfully accept
-            </label>
+              <div className={styles.radioRow}>
+                <label>
+                  <input
+                    type="radio"
+                    name={`attending-${guest.id}`}
+                    checked={guest.attending === true}
+                    onChange={() => updateGuest(guest.id, { attending: true })}
+                  />
+                  Joyfully accept
+                </label>
 
-            <label>
-              <input
-                type="radio"
-                name={`attending-${guest.id}`}
-                checked={guest.attending === false}
-                onChange={() =>
-                  updateGuest(guest.id, { attending: false, dietary: "" })
-                }
-              />
-              Regretfully decline
-            </label>
-          </div>
+                <label>
+                  <input
+                    type="radio"
+                    name={`attending-${guest.id}`}
+                    checked={guest.attending === false}
+                    onChange={() =>
+                      updateGuest(guest.id, { attending: false, dietary: "" })
+                    }
+                  />
+                  Regretfully decline
+                </label>
+              </div>
 
-          {guest.attending ? (
-            <div className={styles.attendingFields}>
-              {guest.is_plus_one && guest.hadMissingName ? (
-                <div className={styles.plusOneFields}>
+              {guest.attending ? (
+                <div className={styles.attendingFields}>
+                  {guest.is_plus_one && guest.hadMissingName ? (
+                    <div className={styles.plusOneFields}>
+                      <label>
+                        Plus One First Name
+                        <input
+                          type="text"
+                          value={guest.first_name}
+                          onChange={(event) =>
+                            updateGuest(guest.id, { first_name: event.target.value })
+                          }
+                          required
+                        />
+                      </label>
+
+                      <label>
+                        Plus One Last Name
+                        <input
+                          type="text"
+                          value={guest.last_name}
+                          onChange={(event) =>
+                            updateGuest(guest.id, { last_name: event.target.value })
+                          }
+                          required
+                        />
+                      </label>
+                    </div>
+                  ) : null}
+
                   <label>
-                    Plus One First Name
+                    Dietary restrictions
                     <input
                       type="text"
-                      value={guest.first_name}
+                      value={guest.dietary}
                       onChange={(event) =>
-                        updateGuest(guest.id, { first_name: event.target.value })
+                        updateGuest(guest.id, { dietary: event.target.value })
                       }
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    Plus One Last Name
-                    <input
-                      type="text"
-                      value={guest.last_name}
-                      onChange={(event) =>
-                        updateGuest(guest.id, { last_name: event.target.value })
-                      }
-                      required
+                      placeholder="Optional"
                     />
                   </label>
                 </div>
               ) : null}
+            </section>
+          ))}
+        </>
+      ) : (
+        <section className={styles.messageStep}>
+          <div className={styles.stepHeader}>
+            <h3>Leave a message to the couple (optional)</h3>
+          </div>
 
-              <label>
-                Dietary restrictions
-                <input
-                  type="text"
-                  value={guest.dietary}
-                  onChange={(event) =>
-                    updateGuest(guest.id, { dietary: event.target.value })
-                  }
-                  placeholder="Optional"
-                />
-              </label>
-            </div>
-          ) : null}
+          <label className={styles.messageField}>
+            <textarea
+              value={messageToCouple}
+              onChange={(event) => setMessageToCouple(event.target.value)}
+              placeholder="Write a message..."
+              rows={6}
+            />
+          </label>
         </section>
-      ))}
+      )}
 
       {error ? <p className={styles.error}>{error}</p> : null}
 
-      <button
-        className={`ctaOutline ${styles.submitButton}`}
-        type="submit"
-        disabled={submitting}
-      >
-        {submitting ? "Submitting..." : "Submit RSVP"}
-      </button>
+      {currentStep === "guests" ? (
+        <button
+          className={`ctaOutline ${styles.submitButton}`}
+          type="button"
+          onClick={goToMessageStep}
+        >
+          Continue
+        </button>
+      ) : (
+        <div className={styles.stepActions}>
+          <button
+            className={`ctaOutline ${styles.submitButton}`}
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting ? "Submitting..." : "Submit RSVP"}
+          </button>
+
+          <button
+            className={styles.backButton}
+            type="button"
+            onClick={() => setCurrentStep("guests")}
+            disabled={submitting}
+          >
+            Back
+          </button>
+        </div>
+      )}
     </form>
   );
 }

@@ -13,6 +13,7 @@ type SubmittedGuest = {
 type SubmitRequest = {
   group_id?: string;
   guests?: SubmittedGuest[];
+  message_to_couple?: string | null;
 };
 
 const normalizedName = (name?: string) => {
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as SubmitRequest;
     const groupId = body.group_id?.trim();
     const guestsPayload = body.guests;
+    const messageToCouple = normalizedName(body.message_to_couple ?? undefined);
 
     if (!groupId || !Array.isArray(guestsPayload) || guestsPayload.length === 0) {
       return NextResponse.json(
@@ -139,7 +141,7 @@ export async function POST(request: Request) {
 
     const { data: lockedRows, error: lockError } = await supabaseServer
       .from("invite_groups")
-      .update({ locked: true })
+      .update({ locked: true, message_to_couple: messageToCouple })
       .eq("id", groupId)
       .eq("locked", false)
       .select("id");
@@ -192,6 +194,7 @@ export async function POST(request: Request) {
               submittedGuest.attending && submittedGuest.dietary?.trim()
                 ? submittedGuest.dietary.trim()
                 : null,
+            message: messageToCouple,
             submitted_at: nowIso,
           }),
         });
