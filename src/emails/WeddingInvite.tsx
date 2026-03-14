@@ -33,7 +33,6 @@ export function WeddingInvite({
         <meta name="supported-color-schemes" content="light only" />
       </head>
       <body
-        bgcolor={colors.background}
         style={{
           margin: 0,
           padding: "24px 12px",
@@ -51,13 +50,11 @@ export function WeddingInvite({
           cellPadding="0"
           cellSpacing="0"
           width="100%"
-          bgcolor={colors.background}
           style={{ width: "100%", maxWidth: "620px", margin: "0 auto" }}
         >
           <tbody>
             <tr>
               <td
-                bgcolor={colors.card}
                 style={{
                   backgroundColor: colors.card,
                   padding: "42px 32px 36px",
