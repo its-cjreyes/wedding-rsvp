@@ -9,14 +9,6 @@
     ]
   },
   {
-    "id": "accommodations",
-    "title": "Accommodations",
-    "body": [
-      "We have reserved a limited number of rooms at The Broadview Hotel for our out-of-town guests at a preferred rate.",
-      "If you’re traveling in and would like more information, please reach out to us directly."
-    ]
-  },
-  {
     "id": "dress-code",
     "title": "Dress Code",
     "body": [
@@ -36,7 +28,7 @@
     "id": "rsvp-deadline",
     "title": "RSVP Deadline",
     "body": [
-      "Kindly respond by [DATE] so we can finalize arrangements."
+      "Kindly respond by Thursday, April 16, 2026 so we can finalize arrangements."
     ]
   },
   {

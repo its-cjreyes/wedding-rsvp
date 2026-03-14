@@ -1,35 +1,45 @@
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
+import { getSiteUrl } from "../lib/site-url";
+
 type WeddingInviteProps = {
   firstName?: string | null;
   inviteCode: string;
   rsvpUrl: string;
+  assetBaseUrl?: string;
 };
 
 const previewText = "You're invited to celebrate Mac and CJ.";
 
 const colors = {
-  background: "#f7f1ec",
-  card: "#fffdfb",
+  background: "#ffffff",
+  card: "#f8f5f2",
   foreground: "#1b7a50",
-  muted: "#5f6d64",
-  border: "#dfe8e1",
+  border: "#1b7a50",
 };
 
 export function WeddingInvite({
-  firstName,
   inviteCode,
   rsvpUrl,
+  assetBaseUrl,
 }: WeddingInviteProps) {
-  const greetingName = firstName?.trim() || "there";
+  const imageBaseUrl = (assetBaseUrl ?? getSiteUrl()).replace(/\/$/, "");
+  const headerImageSrc = `${imageBaseUrl}/email/email-header.png`;
+  const footerImageSrc = `${imageBaseUrl}/email/email-footer.png`;
 
   return (
     <html>
+      <head>
+        <meta name="color-scheme" content="light only" />
+        <meta name="supported-color-schemes" content="light only" />
+      </head>
       <body
+        bgcolor={colors.background}
         style={{
           margin: 0,
           padding: "24px 12px",
           backgroundColor: colors.background,
           color: colors.foreground,
-          fontFamily: "Georgia, 'Times New Roman', serif",
+          fontFamily: "Arial, Helvetica, sans-serif",
         }}
       >
         <div style={{ display: "none", maxHeight: 0, overflow: "hidden", opacity: 0 }}>
@@ -41,165 +51,173 @@ export function WeddingInvite({
           cellPadding="0"
           cellSpacing="0"
           width="100%"
-          style={{ maxWidth: "640px", margin: "0 auto" }}
+          bgcolor={colors.background}
+          style={{ width: "100%", maxWidth: "620px", margin: "0 auto" }}
         >
           <tbody>
             <tr>
               <td
+                bgcolor={colors.card}
                 style={{
                   backgroundColor: colors.card,
-                  border: `1px solid ${colors.border}`,
-                  borderRadius: "18px",
-                  padding: "40px 32px",
+                  padding: "42px 32px 36px",
+                  textAlign: "center",
+                  width: "100%",
+                  maxWidth: "620px",
+                  boxSizing: "border-box",
                 }}
               >
-                <p
+                <img
+                  src={headerImageSrc}
+                  alt="Mac and CJ wedding logo"
+                  width="360"
+                  height="169"
                   style={{
-                    margin: "0 0 12px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "12px",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: colors.muted,
+                    display: "block",
+                    width: "360px",
+                    maxWidth: "100%",
+                    height: "auto",
+                    margin: "0 auto 34px",
+                    border: 0,
+                    outline: "none",
+                    textDecoration: "none",
                   }}
-                >
-                  Wedding Invitation
-                </p>
-
-                <h1 style={{ margin: "0 0 20px", fontSize: "40px", fontWeight: 500 }}>
-                  Mac and CJ
-                </h1>
+                />
 
                 <p
                   style={{
-                    margin: "0 0 16px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "16px",
-                    lineHeight: 1.6,
+                    margin: "0 auto 34px",
+                    maxWidth: "420px",
+                    fontSize: "20px",
+                    lineHeight: 1.45,
                     color: colors.foreground,
                   }}
                 >
-                  Hi {greetingName},
-                </p>
-
-                <p
-                  style={{
-                    margin: "0 0 16px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "16px",
-                    lineHeight: 1.6,
-                    color: colors.foreground,
-                  }}
-                >
-                  We&apos;re so happy to invite you to celebrate our wedding.
+                  We joyfully invite you to celebrate the wedding&nbsp;of&nbsp;Mac&nbsp;&amp;&nbsp;CJ.
                 </p>
 
                 <p
                   style={{
-                    margin: "0 0 24px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "16px",
-                    lineHeight: 1.6,
+                    margin: "0 auto 34px",
+                    maxWidth: "360px",
+                    fontSize: "20px",
+                    lineHeight: 1.45,
+                    fontWeight: 700,
                     color: colors.foreground,
                   }}
                 >
-                  Friday, October 16, 2026
+                  Friday 16 October 2026
                   <br />
                   The Broadview Hotel
                   <br />
                   Toronto, Ontario
                 </p>
 
-                <div
+                <p
                   style={{
-                    margin: "0 0 24px",
-                    padding: "18px 20px",
-                    borderRadius: "14px",
-                    backgroundColor: "#f2f7f4",
-                    border: `1px solid ${colors.border}`,
+                    margin: "0 auto 26px",
+                    maxWidth: "420px",
+                    fontSize: "20px",
+                    lineHeight: 1.45,
+                    color: colors.foreground,
                   }}
                 >
-                  <p
-                    style={{
-                      margin: "0 0 8px",
-                      fontFamily: "Arial, Helvetica, sans-serif",
-                      fontSize: "13px",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: colors.muted,
-                    }}
-                  >
-                    Your Invite Code
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: "Arial, Helvetica, sans-serif",
-                      fontSize: "28px",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      color: colors.foreground,
-                    }}
-                  >
-                    {inviteCode}
-                  </p>
-                </div>
+                  For event details and to RSVP, please visit&nbsp;our&nbsp;website.
+                </p>
+
+                <p
+                  style={{
+                    margin: "0 auto 34px",
+                    maxWidth: "360px",
+                    fontSize: "20px",
+                    lineHeight: 1.45,
+                    fontWeight: 700,
+                    color: colors.foreground,
+                  }}
+                >
+                  Please RSVP by 16 April 2026.
+                </p>
+
+                <p
+                  style={{
+                    margin: "0 auto 30px",
+                    maxWidth: "420px",
+                    fontSize: "20px",
+                    lineHeight: 1.45,
+                    color: colors.foreground,
+                  }}
+                >
+                  Your invite code:{" "}
+                  <span style={{ fontWeight: 700 }}>{inviteCode}</span>
+                </p>
 
                 <table
                   role="presentation"
                   cellPadding="0"
                   cellSpacing="0"
-                  style={{ marginBottom: "20px" }}
+                  width="100%"
+                  style={{ width: "100%", maxWidth: "420px", margin: "0 auto 42px" }}
                 >
                   <tbody>
                     <tr>
-                      <td style={{ borderRadius: "999px", backgroundColor: colors.foreground }}>
+                      <td
+                        style={{
+                          width: "100%",
+                          borderRadius: "4px",
+                          border: `2px solid ${colors.border}`,
+                          backgroundColor: "transparent",
+                        }}
+                      >
                         <a
                           href={rsvpUrl}
                           style={{
                             display: "inline-block",
-                            padding: "14px 24px",
-                            fontFamily: "Arial, Helvetica, sans-serif",
-                            fontSize: "15px",
-                            fontWeight: 600,
-                            color: "#fffdfb",
+                            width: "100%",
+                            maxWidth: "420px",
+                            padding: "15px 28px",
+                            boxSizing: "border-box",
+                            fontSize: "20px",
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            color: colors.foreground,
                             textDecoration: "none",
                           }}
                         >
-                          RSVP on our website
+                          RSVP
                         </a>
                       </td>
                     </tr>
                   </tbody>
                 </table>
 
-                <p
+                <img
+                  src={footerImageSrc}
+                  alt="Illustration of The Broadview Hotel"
+                  width="304"
+                  height="376"
                   style={{
-                    margin: "0 0 12px",
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "14px",
-                    lineHeight: 1.6,
-                    color: colors.muted,
+                    display: "block",
+                    width: "430px",
+                    maxWidth: "100%",
+                    height: "auto",
+                    margin: "0 auto 34px",
+                    border: 0,
+                    outline: "none",
+                    textDecoration: "none",
                   }}
-                >
-                  The RSVP page will open with your invite code filled in, but you&apos;ll still
-                  need to review it and click Continue yourself.
-                </p>
+                />
 
                 <p
                   style={{
                     margin: 0,
-                    fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize: "14px",
-                    lineHeight: 1.6,
-                    color: colors.muted,
+                    fontSize: "19px",
+                    lineHeight: 1.5,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: colors.foreground,
                   }}
                 >
-                  If the button does not work, copy and paste this link into your browser:
-                  <br />
-                  <a href={rsvpUrl} style={{ color: colors.foreground, wordBreak: "break-all" }}>
-                    {rsvpUrl}
-                  </a>
+                  We can&apos;t wait to celebrate&nbsp;with&nbsp;you.
                 </p>
               </td>
             </tr>
