@@ -22,6 +22,29 @@ export type InviteRecipient = {
   inviteCode: string;
 };
 
+type InviteGroupGuestRow = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+};
+
+type InviteGroupRow = {
+  id: string;
+  invite_code: string | null;
+  round: string | number | null;
+  invite_sent: boolean | null;
+  guests: InviteGroupGuestRow[] | null;
+};
+
+export type InviteRecipientGroup = {
+  groupId: string;
+  inviteCode: string;
+  round: string | number | null;
+  inviteSent: boolean;
+  recipients: InviteRecipient[];
+};
+
 const recipientSelect =
   "id, first_name, last_name, email, invite_group_id, invite_groups!inner(invite_code)";
 
@@ -94,4 +117,79 @@ export async function getInviteRecipientByGuestEmail(email: string) {
   }
 
   return data ? normalizeRecipient(data as InviteRecipientRow) : null;
+}
+
+const groupSelect =
+  "id, invite_code, round, invite_sent, guests(id, first_name, last_name, email)";
+
+const normalizeInviteRecipientGroup = (
+  row: InviteGroupRow
+): InviteRecipientGroup | null => {
+  const inviteCode = row.invite_code?.trim();
+
+  if (!inviteCode) {
+    return null;
+  }
+
+  const recipients =
+    row.guests
+      ?.map((guest) => {
+        const email = guest.email?.trim();
+
+        if (!email) {
+          return null;
+        }
+
+        return {
+          guestId: guest.id,
+          groupId: row.id,
+          firstName: guest.first_name,
+          lastName: guest.last_name,
+          email,
+          inviteCode,
+        } satisfies InviteRecipient;
+      })
+      .filter((recipient): recipient is InviteRecipient => recipient !== null) ?? [];
+
+  if (recipients.length === 0) {
+    return null;
+  }
+
+  return {
+    groupId: row.id,
+    inviteCode,
+    round: row.round,
+    inviteSent: Boolean(row.invite_sent),
+    recipients,
+  };
+};
+
+export async function listInviteRecipientGroupsForRound(round: string) {
+  const parsedRound = /^\d+$/.test(round) ? Number(round) : round;
+
+  const { data, error } = await supabaseServer
+    .from("invite_groups")
+    .select(groupSelect)
+    .eq("round", parsedRound)
+    .eq("invite_sent", false)
+    .order("id", { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data as InviteGroupRow[] | null)
+    ?.map(normalizeInviteRecipientGroup)
+    .filter((group): group is InviteRecipientGroup => group !== null) ?? [];
+}
+
+export async function markInviteGroupSent(groupId: string) {
+  const { error } = await supabaseServer
+    .from("invite_groups")
+    .update({ invite_sent: true })
+    .eq("id", groupId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }
