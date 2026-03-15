@@ -90,7 +90,7 @@ export function WeddingInvite({
                     color: colors.foreground,
                   }}
                 >
-                  We joyfully invite you to celebrate the wedding&nbsp;of&nbsp;Mac&nbsp;&amp;&nbsp;CJ.
+                  Please join us in celebrating the wedding&nbsp;of&nbsp;Mac&nbsp;&amp;&nbsp;CJ.
                 </p>
 
                 <p

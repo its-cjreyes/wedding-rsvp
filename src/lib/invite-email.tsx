@@ -37,7 +37,7 @@ export async function sendWeddingInviteEmail({
     from: fromEmail,
     to,
     replyTo: replyToEmail || undefined,
-    subject: "You're invited to celebrate Mac and CJ",
+    subject: "Mac and CJ are getting married",
     react: (
       <WeddingInvite
         firstName={firstName}
