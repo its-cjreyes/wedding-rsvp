@@ -5,9 +5,14 @@
     "caption": "📍 Riverdale Park - 01.09.24 💍"
   },
   {
-    "src": "/photos/hanlans.webp",
-    "alt": "Hanlan's",
-    "caption": "📍 Hanlan's"
+    "src": "/photos/mexico-city.webp",
+    "alt": "Mexico City, MX",
+    "caption": "📍 Mexico City, MX"
+  },
+  {
+    "src": "/photos/paris.webp",
+    "alt": "Paris, FR",
+    "caption": "📍 Paris, FR"
   },
   {
     "src": "/photos/london.webp",
@@ -15,14 +20,14 @@
     "caption": "📍 London, UK"
   },
   {
+    "src": "/photos/hanlans.webp",
+    "alt": "Hanlan's",
+    "caption": "📍 Hanlan's"
+  },
+  {
     "src": "/photos/puerto-vallarta.webp",
     "alt": "Puerto Vallarta, MX",
     "caption": "📍 Puerto Vallarta, MX"
-  },
-  {
-    "src": "/photos/paris.webp",
-    "alt": "Paris, FR",
-    "caption": "📍 Paris, FR"
   },
   {
     "src": "/photos/cabbagetown.webp",
@@ -40,19 +45,14 @@
     "caption": "📍 Douro Valley, PT"
   },
   {
-    "src": "/photos/iannuzi.webp",
-    "alt": "Iannuzi St",
-    "caption": "📍 Iannuzi St"
-  },
-  {
-    "src": "/photos/mexico-city.webp",
-    "alt": "Mexico City, MX",
-    "caption": "📍 Mexico City, MX"
-  },
-  {
     "src": "/photos/nyc.webp",
     "alt": "NYC, NY",
     "caption": "📍 NYC, NY"
+  },
+  {
+    "src": "/photos/iannuzi.webp",
+    "alt": "Iannuzi St",
+    "caption": "📍 Iannuzi St"
   },
   {
     "src": "/photos/key-west.webp",
@@ -63,5 +63,10 @@
     "src": "/photos/tofino.webp",
     "alt": "Tofino, BC",
     "caption": "📍 Tofino, BC"
+  },
+  {
+    "src": "/photos/home.webp",
+    "alt": "home",
+    "caption": "📍 Home"
   }
 ]

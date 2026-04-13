@@ -59,7 +59,7 @@ export function HomePageClient({
                 <p>Friday 16 October 2026</p>
                 <p>5:00PM Arrival · 5:30PM Ceremony</p>
                 <br></br>
-                <p>RSVP by 16 April 2026</p>
+                <p>RSVP by 15 May 2026</p>
               </div>
 
               <div className={styles.heroActions}>
@@ -102,7 +102,10 @@ export function HomePageClient({
                     {isOpen ? (
                       <div id={`${item.id}-panel`} className={styles.accordionPanel}>
                         {item.body.map((paragraph, index) => (
-                          <p key={`${item.id}-${index}`}>{paragraph}</p>
+                          <p
+                            key={`${item.id}-${index}`}
+                            dangerouslySetInnerHTML={{ __html: paragraph }}
+                          />
                         ))}
                       </div>
                     ) : null}

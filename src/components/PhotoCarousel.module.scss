@@ -1,5 +1,5 @@
 .carousel {
-  width: min(100%, 36rem);
+  width: min(100%, 30rem);
   display: grid;
   justify-items: center;
   gap: 2rem;
@@ -8,7 +8,7 @@
 .stackButton {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 6 / 5;
   border: 0;
   padding: 0;
   background: transparent;
@@ -134,7 +134,7 @@
 
 @media (max-width: 64rem) {
   .carousel {
-    width: min(100%, 32rem);
+    width: min(100%, 30rem);
     margin-inline: auto;
   }
 }

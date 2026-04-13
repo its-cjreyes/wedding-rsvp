@@ -192,7 +192,7 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
                 isSlotIncoming ? styles.incoming : "",
               ].join(" ")}
             >
-              <Image src={photo.src} alt={photo.alt} fill sizes="(max-width: 850px) 100vw, 40vw" />
+              <Image src={photo.src} alt={photo.alt} fill sizes="(max-width: 850px) 100vw, 480px" />
             </div>
           );
         })}

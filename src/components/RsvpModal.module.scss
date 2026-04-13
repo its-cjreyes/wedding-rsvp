@@ -8,6 +8,7 @@
   place-items: center;
   z-index: 1000;
   padding: 1rem;
+  animation: backdropFadeIn 0.2s ease;
 }
 
 .modal {
@@ -19,6 +20,29 @@
   border-radius: calc(var(--radius-control) * 2);
   padding: 2.25rem 2rem 2rem;
   position: relative;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.625rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .closeButton {

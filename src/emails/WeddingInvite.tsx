@@ -132,7 +132,7 @@ export function WeddingInvite({
                     color: colors.foreground,
                   }}
                 >
-                  Please RSVP by 16 April 2026.
+                  Please RSVP by 15 May 2026.
                 </p>
 
                 <p
