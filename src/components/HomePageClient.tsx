@@ -58,8 +58,6 @@ export function HomePageClient({
                 <p>The Broadview Hotel</p>
                 <p>Friday 16 October 2026</p>
                 <p>5:00PM Arrival · 5:30PM Ceremony</p>
-                <br></br>
-                <p>RSVP by 15 May 2026</p>
               </div>
 
               <div className={styles.heroActions}>
