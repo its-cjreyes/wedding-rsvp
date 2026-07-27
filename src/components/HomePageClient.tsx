@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { PhotoCarousel } from "@/components/PhotoCarousel";
-import { RsvpModal } from "@/components/RsvpModal";
+import { MealPreferenceModal } from "@/components/MealPreferenceModal";
 import carouselPhotos from "@/content/carousel-photos.json";
 import detailsAccordionItems from "@/content/details-accordion.json";
 import broadviewIllustration from "@/assets/Broadview-Hotel-Illustration.svg";
@@ -14,6 +14,8 @@ import styles from "@/app/page.module.scss";
 
 type HomePageClientProps = {
   initialInviteCode?: string;
+  openMealPreferences?: boolean;
+  previewMealPreferences?: boolean;
 };
 
 type DetailAccordionItem = {
@@ -30,8 +32,10 @@ type CarouselPhoto = {
 
 export function HomePageClient({
   initialInviteCode = "",
+  openMealPreferences = false,
+  previewMealPreferences = false,
 }: HomePageClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMealPreferenceModalOpen, setIsMealPreferenceModalOpen] = useState(openMealPreferences);
   const [openDetailId, setOpenDetailId] = useState<string>("");
 
   const toggleDetail = (id: string) => {
@@ -64,9 +68,9 @@ export function HomePageClient({
                 <button
                   type="button"
                   className={`ctaOutline ${styles.rsvpButton}`}
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => setIsMealPreferenceModalOpen(true)}
                 >
-                  RSVP
+                  Select Meal
                 </button>
                 <a href="#details" className={styles.detailsLink}>
                   THE DETAILS
@@ -126,10 +130,11 @@ export function HomePageClient({
         </section>
       </main>
 
-      <RsvpModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+      <MealPreferenceModal
+        isOpen={isMealPreferenceModalOpen}
+        onClose={() => setIsMealPreferenceModalOpen(false)}
         initialInviteCode={initialInviteCode}
+        preview={previewMealPreferences}
       />
     </div>
   );

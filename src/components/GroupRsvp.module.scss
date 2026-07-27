@@ -19,6 +19,13 @@
   }
 }
 
+.guestHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .radioRow {
   display: grid;
   gap: 0.45rem;
@@ -68,12 +75,120 @@
     font-size: 0.95rem;
   }
 
-  input {
+  input,
+  select {
     border: 1px solid #d4d4d4;
     border-radius: var(--radius-control);
     padding: 0.6rem 0.7rem;
     font-size: 1rem;
+    color: var(--foreground);
+    background: #fff;
   }
+}
+
+.formIntro {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.mealChoices {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+}
+
+.mealChoice {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem !important;
+  align-items: start;
+  cursor: pointer;
+
+  input[type="radio"] {
+    appearance: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0.15rem 0 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--foreground);
+    background: transparent;
+    display: inline-grid;
+    place-content: center;
+    flex-shrink: 0;
+
+    &::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      transform: scale(0);
+      background: var(--foreground);
+      transition: transform 0.15s ease-in-out;
+    }
+
+    &:checked::before {
+      transform: scale(1);
+    }
+  }
+
+  > span {
+    display: grid;
+    gap: 0.2rem;
+    line-height: 1.35;
+
+    span {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.mealSummary {
+  display: grid;
+  gap: 0.4rem;
+
+  p {
+    margin: 0;
+    line-height: 1.4;
+
+    &:first-child {
+      font-weight: 600;
+    }
+  }
+}
+
+.saveMealButton {
+  justify-self: start;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.editButton,
+.selectMealButton {
+  justify-self: start;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: none;
+  }
+}
+
+.selectMealButton {
+  font-style: italic;
 }
 
 .plusOneFields {
@@ -147,6 +262,7 @@
   font-size: 1.125rem;
   text-decoration: underline;
   text-underline-offset: 0.4em;
+  text-transform: uppercase;
   cursor: pointer;
 
   &:hover,
@@ -168,4 +284,10 @@
   background: #f2f8f2;
   border: 1px solid #c9e7ca;
   text-align: center;
+}
+
+.detailsButton {
+  justify-self: center;
+  width: fit-content;
+  margin-top: 1rem;
 }

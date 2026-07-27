@@ -72,6 +72,10 @@ input {
 }
 
 .ctaOutline {
+  text-transform: uppercase;
+}
+
+.ctaOutline {
   border: 1px solid currentColor;
   border-radius: var(--radius-control);
   padding: var(--cta-padding-block) var(--cta-padding-inline);
