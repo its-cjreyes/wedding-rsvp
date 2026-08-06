@@ -57,9 +57,19 @@
 }
 
 .captionWrap {
+  display: grid;
+  align-items: center;
   min-height: 2rem;
   width: 100%;
   text-align: center;
+}
+
+.captionRow {
+  width: 100%;
+}
+
+.captionNav {
+  display: none;
 }
 
 .caption {
@@ -143,6 +153,38 @@
   .carousel {
     width: min(100%, 30rem);
     margin-inline: auto;
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  .carousel {
+    gap: 1.25rem;
+  }
+
+  .captionRowWithControls {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) 2rem;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .captionNav {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--foreground);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
   }
 }
 

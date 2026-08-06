@@ -212,10 +212,38 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
         ) : null}
       </button>
 
-      <div className={styles.captionWrap} aria-live="polite">
-        <p className={`${styles.caption} ${isCaptionFading ? styles.captionOut : styles.captionIn}`}>
-          {captionPhoto.caption}
-        </p>
+      <div
+        className={[styles.captionRow, hasMultiple ? styles.captionRowWithControls : ""].join(" ")}
+      >
+        {hasMultiple ? (
+          <button
+            type="button"
+            className={styles.captionNav}
+            onClick={() => runTransition("prev")}
+            disabled={isAnimating}
+            aria-label="Show previous photo"
+          >
+            ←
+          </button>
+        ) : null}
+
+        <div className={styles.captionWrap} aria-live="polite">
+          <p className={`${styles.caption} ${isCaptionFading ? styles.captionOut : styles.captionIn}`}>
+            {captionPhoto.caption}
+          </p>
+        </div>
+
+        {hasMultiple ? (
+          <button
+            type="button"
+            className={styles.captionNav}
+            onClick={() => runTransition("next")}
+            disabled={isAnimating}
+            aria-label="Show next photo"
+          >
+            →
+          </button>
+        ) : null}
       </div>
 
       {hasMultiple ? <span className={styles.nextHint} aria-hidden="true" /> : null}

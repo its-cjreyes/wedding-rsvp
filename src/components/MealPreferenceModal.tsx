@@ -62,7 +62,7 @@ export function MealPreferenceModal({
                 id: "preview-guest-1",
                 first_name: "Guest",
                 last_name: "One",
-                dietary_restrictions: null,
+                dietary_restrictions: "Gluten-free",
                 meal_preference: null,
               },
               {

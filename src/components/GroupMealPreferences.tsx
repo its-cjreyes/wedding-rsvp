@@ -158,7 +158,7 @@ export function GroupMealPreferences({
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <p className={styles.formIntro}>
-        Please select a meal for each attending guest. You can also update dietary&nbsp;restrictions.
+        Please select a meal for each guest. You can also update dietary restrictions.
       </p>
 
       {guestStates.map((guest, index) => {

@@ -110,8 +110,14 @@
   input[type="radio"] {
     appearance: none;
     width: 1.15rem;
+    min-width: 1.15rem;
     height: 1.15rem;
+    min-height: 1.15rem;
+    aspect-ratio: 1;
     margin: 0.15rem 0 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1;
     border-radius: 50%;
     border: 1.5px solid var(--foreground);
     background: transparent;

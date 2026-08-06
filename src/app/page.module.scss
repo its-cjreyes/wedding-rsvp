@@ -67,20 +67,9 @@
   flex-wrap: wrap;
 }
 
-.rsvpButton {
+.detailsButton {
   min-width: fit-content;
-}
-
-.detailsLink {
-  font-size: 1.125rem;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.4em;
-
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
+  text-decoration: none;
 }
 
 .detailsSection {

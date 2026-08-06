@@ -65,14 +65,7 @@ export function HomePageClient({
               </div>
 
               <div className={styles.heroActions}>
-                <button
-                  type="button"
-                  className={`ctaOutline ${styles.rsvpButton}`}
-                  onClick={() => setIsMealPreferenceModalOpen(true)}
-                >
-                  Select Meal
-                </button>
-                <a href="#details" className={styles.detailsLink}>
+                <a href="#details" className={`ctaOutline ${styles.detailsButton}`}>
                   THE DETAILS
                 </a>
               </div>

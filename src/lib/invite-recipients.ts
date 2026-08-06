@@ -2,6 +2,7 @@ import { supabaseServer } from "./supabase-server";
 
 type InviteGroupRelation = {
   invite_code: string | null;
+  meal_preferences_submitted_at?: string | null;
 };
 
 type InviteRecipientRow = {
@@ -47,6 +48,8 @@ export type InviteRecipientGroup = {
 
 const recipientSelect =
   "id, first_name, last_name, email, invite_group_id, invite_groups!inner(invite_code)";
+const mealPreferenceRecipientSelect =
+  "id, first_name, last_name, email, invite_group_id, invite_groups!inner(invite_code, meal_preferences_submitted_at)";
 
 const normalizeRecipient = (row: InviteRecipientRow): InviteRecipient | null => {
   const email = row.email?.trim();
@@ -188,6 +191,40 @@ export async function markInviteGroupSent(groupId: string) {
     .from("invite_groups")
     .update({ invite_sent: true })
     .eq("id", groupId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function listMealPreferenceRecipients() {
+  const { data, error } = await supabaseServer
+    .from("guests")
+    .select(mealPreferenceRecipientSelect)
+    .eq("attending", true)
+    .eq("meal_preference_email_enabled", true)
+    .eq("meal_preference_email_sent", false)
+    .is("invite_groups.meal_preferences_submitted_at", null)
+    .not("email", "is", null)
+    .order("invite_group_id", { ascending: true })
+    .order("last_name", { ascending: true, nullsFirst: false })
+    .order("first_name", { ascending: true, nullsFirst: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data as InviteRecipientRow[] | null)
+    ?.map(normalizeRecipient)
+    .filter((recipient): recipient is InviteRecipient => recipient !== null) ?? [];
+}
+
+export async function markMealPreferenceEmailSent(guestId: string) {
+  const { error } = await supabaseServer
+    .from("guests")
+    .update({ meal_preference_email_sent: true })
+    .eq("id", guestId)
+    .eq("meal_preference_email_sent", false);
 
   if (error) {
     throw new Error(error.message);
