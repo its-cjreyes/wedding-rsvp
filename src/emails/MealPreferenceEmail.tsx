@@ -7,7 +7,7 @@ type MealPreferenceEmailProps = {
   assetBaseUrl?: string;
 };
 
-const previewText = "Select your wedding meal preference";
+const previewText = "Please submit your selection by 28 August 2026.";
 
 const colors = {
   background: "#ffffff",

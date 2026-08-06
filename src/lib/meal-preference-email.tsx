@@ -36,7 +36,7 @@ export async function sendMealPreferenceEmail({
     from: fromEmail,
     to,
     replyTo: replyToEmail || undefined,
-    subject: "Mac and CJ: Select your meal",
+    subject: "Time to select your meal!",
     react: <MealPreferenceEmail inviteCode={inviteCode} mealPreferenceUrl={mealPreferenceUrl} />,
   });
 }
